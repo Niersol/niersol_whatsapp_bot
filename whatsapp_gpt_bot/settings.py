@@ -137,21 +137,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "<your-api-key-here>")
 WHATSAPP_TOKEN = os.getenv("WHATSAPP_TOKEN", "<your-api-key-here>")
 
-CELERY_BROKER_URL = 'redis://default:AeVSAQIncDEwNmU2Y2FhYWQ4OTA0OTUwOWIzZjMxMjQ2NjJkZGVhMXAxNTg3MDY@credible-lemming-58706.upstash.io:6379/0'  # or 'amqp://guest:guest@localhost//'
-CELERY_RESULT_BACKEND = 'redis://default:AeVSAQIncDEwNmU2Y2FhYWQ4OTA0OTUwOWIzZjMxMjQ2NjJkZGVhMXAxNTg3MDY@credible-lemming-58706.upstash.io:6379/0'
+CELERY_BROKER_URL = 'redis://:45645688mm@ 204.48.23.219:6379/0'  # or 'amqp://guest:guest@localhost//'
+CELERY_RESULT_BACKEND = 'redis://:45645688mm@ 204.48.23.219:6379/0'
 
 # Timezone (optional)
 CELERY_TIMEZONE = 'UTC'
 
-
-CELERY_BROKER_POOL_LIMIT = 1
-CELERY_REDIS_MAX_CONNECTIONS = 1
-
-# Add a heartbeat so the server doesn’t close “idle” connections.
-CELERY_BROKER_HEARTBEAT = 10
-# You can also experiment with no heartbeat: 
-# CELERY_BROKER_HEARTBEAT = None
-
-# Optional timeouts
-CELERY_BROKER_CONNECTION_TIMEOUT = 10
-CELERY_BROKER_CONNECTION_MAX_RETRIES = 3
