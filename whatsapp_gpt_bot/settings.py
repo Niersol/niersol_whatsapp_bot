@@ -143,3 +143,23 @@ CELERY_RESULT_BACKEND = 'redis://:45645688mm@204.48.23.219:6379/0'
 # Timezone (optional)
 CELERY_TIMEZONE = 'UTC'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',  # Change to DEBUG for detailed logs
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
