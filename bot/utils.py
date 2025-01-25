@@ -39,7 +39,7 @@ def send_whatsapp_typing_indicator(to_number):
     data = {
         "messaging_product": "whatsapp",
         "to": to_number,
-        "type": "typing_on"  # Typing state
+        "type": "typing"  # Typing state
     }
     response = requests.post(url, headers=headers, json=data)
     response.raise_for_status()
@@ -47,7 +47,8 @@ def send_whatsapp_typing_indicator(to_number):
 
 def send_whatsapp_message(to_number, message_text):
     send_whatsapp_typing_indicator(to_number)
-    time.sleep(len(message_text)//20)
+    delay = max(1, min(len(message_text) // 20, 5))  # Between 1 to 5 seconds
+    time.sleep(delay)
     url = f"{WHATSAPP_CLOUD_API_BASE}/{PHONE_NUMBER_ID}/messages"
     headers = {
         "Authorization": f"Bearer {WHATSAPP_TOKEN}",
