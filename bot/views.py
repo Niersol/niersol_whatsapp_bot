@@ -1,12 +1,14 @@
 import json
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
 from .utils import get_gpt_response,send_whatsapp_message
+from asgiref.sync import sync_to_async
 
 VERIFY_TOKEN = "03248673732"  # same token you set in Meta Dashboard
 
 @csrf_exempt
-def whatsapp_webhook(request):
+async def whatsapp_webhook(request):
     if request.method == 'GET':
         # Verification logic
         verify_token = request.GET.get('hub.verify_token')
@@ -22,28 +24,20 @@ def whatsapp_webhook(request):
         # Log or process the incoming message as needed
         # ...
         if "entry" in incoming_data:
-            for entry in incoming_data["entry"]:
-                changes = entry.get("changes", [])
-                for change in changes:
+            for entry in incoming_data.get("entry", []):
+                for change in entry.get("changes", []):
                     value = change.get("value", {})
-                    messages = value.get("messages", [])
-                    for msg in messages:
-                        # Extract the phone number from msg['from']
+                    for msg in value.get("messages", []):
                         sender_phone = msg.get("from")
-                        # Extract the text from msg.get("text", {}).get("body")
                         user_text = msg.get("text", {}).get("body", "")
-                        
-                        # Use GPT to get a response
-                        bot_reply = get_gpt_response(user_text)
-                        
-                        # Send the response to the user on WhatsApp
-                        send_whatsapp_message(sender_phone, bot_reply)
-
+                        if sender_phone and user_text:
+                            bot_reply = await sync_to_async(get_gpt_response)(user_text)
+                            await sync_to_async(send_whatsapp_message)(sender_phone, bot_reply)
+                            
         return HttpResponse("Event received", status=200)
 
     return HttpResponse("Invalid request", status=404)
 
-from django.shortcuts import render
 
 def privacy_policy(request):
     return render(request, 'index.html')
