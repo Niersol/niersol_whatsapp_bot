@@ -24,3 +24,8 @@ def whatsapp_webhook(request):
         return HttpResponse("Event received", status=200)
 
     return HttpResponse("Invalid request", status=404)
+
+from django.shortcuts import render
+
+def privacy_policy(request):
+    return render(request, 'index.html')
