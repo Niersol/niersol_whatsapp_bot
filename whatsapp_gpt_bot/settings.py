@@ -142,3 +142,16 @@ CELERY_RESULT_BACKEND = 'redis://default:AeVSAQIncDEwNmU2Y2FhYWQ4OTA0OTUwOWIzZjM
 
 # Timezone (optional)
 CELERY_TIMEZONE = 'UTC'
+
+
+CELERY_BROKER_POOL_LIMIT = 1
+CELERY_REDIS_MAX_CONNECTIONS = 1
+
+# Add a heartbeat so the server doesn’t close “idle” connections.
+CELERY_BROKER_HEARTBEAT = 10
+# You can also experiment with no heartbeat: 
+# CELERY_BROKER_HEARTBEAT = None
+
+# Optional timeouts
+CELERY_BROKER_CONNECTION_TIMEOUT = 10
+CELERY_BROKER_CONNECTION_MAX_RETRIES = 3
