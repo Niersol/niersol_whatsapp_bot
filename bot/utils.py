@@ -1,26 +1,23 @@
 import openai
 from django.conf import settings
-
-openai.api_key = settings.OPENAI_API_KEY
-
+from openai import OpenAI
+client = OpenAI(api_key=settings.OPENAI_API_KEY)
 def get_gpt_response(user_message):
     """
     Sends user_message to GPT and returns the response.
     """
     try:
-        response = openai.chat.completions.create(
+        response = client.chat.completions.create(
             model="gpt-4o",  # or "gpt-4", etc.
             messages=[
                 {"role": "system", "content": "You are a helpful WhatsApp chatbot."},
                 {"role": "user", "content": user_message},
             ],
-            max_tokens=150,
-            temperature=0.7,
         )
-        answer = response['choices'][0]['message']['content']
+        answer = response.choices[0].message.content
         return answer.strip()
     except Exception as e:
-        print(f"OpenAI API error: {str(e)}")
+        print(f"client API error: {str(e)}")
         return "Sorry, I couldn't process that at the moment."
 
 import requests
