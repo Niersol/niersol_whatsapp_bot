@@ -6,7 +6,7 @@ from .utils import get_gpt_response,send_whatsapp_message
 from asgiref.sync import sync_to_async
 from .models import Conversation
 from django.conf import settings
-from tasks import process_incoming_message
+from .tasks import process_incoming_message
 from openai import OpenAI 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
