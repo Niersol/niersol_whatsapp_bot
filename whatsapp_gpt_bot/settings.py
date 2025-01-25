@@ -134,3 +134,5 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "<your-api-key-here>")
+WHATSAPP_TOKEN = os.getenv("WHATSAPP_TOKEN", "<your-api-key-here>")
