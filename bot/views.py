@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from .utils import get_gpt_response,send_whatsapp_message
 from asgiref.sync import sync_to_async
-from models import Conversation
+from .models import Conversation
 from django.conf import settings
 from tasks import process_incoming_message
 from openai import OpenAI 
