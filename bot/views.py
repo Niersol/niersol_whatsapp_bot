@@ -16,7 +16,7 @@ client = OpenAI(api_key=settings.OPENAI_API_KEY)
 VERIFY_TOKEN = "03248673732"  # same token you set in Meta Dashboard
 
 @csrf_exempt
-async def whatsapp_webhook(request):
+def whatsapp_webhook(request):
     print("whatsapp_webhook called.")
     print(f"Request method: {request.method}")
 
