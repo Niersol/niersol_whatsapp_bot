@@ -136,3 +136,9 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "<your-api-key-here>")
 WHATSAPP_TOKEN = os.getenv("WHATSAPP_TOKEN", "<your-api-key-here>")
+
+CELERY_BROKER_URL = 'redis://default:AeVSAQIncDEwNmU2Y2FhYWQ4OTA0OTUwOWIzZjMxMjQ2NjJkZGVhMXAxNTg3MDY@credible-lemming-58706.upstash.io:6379/0'  # or 'amqp://guest:guest@localhost//'
+CELERY_RESULT_BACKEND = 'redis://default:AeVSAQIncDEwNmU2Y2FhYWQ4OTA0OTUwOWIzZjMxMjQ2NjJkZGVhMXAxNTg3MDY@credible-lemming-58706.upstash.io:6379/0'
+
+# Timezone (optional)
+CELERY_TIMEZONE = 'UTC'
