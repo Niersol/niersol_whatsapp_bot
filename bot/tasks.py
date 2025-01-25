@@ -98,3 +98,7 @@ def process_incoming_message(sender_phone, thread_id):
             logger.info(e)
     else:
         logger.info(f"[process_incoming_message] run status is not 'completed': {run.status}")
+
+@shared_task
+def simple_task():
+    return "Task completed!"
