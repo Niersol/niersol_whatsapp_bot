@@ -2,23 +2,42 @@ import openai
 from django.conf import settings
 import time
 import requests
+from .models import Conversation
 
 from openai import OpenAI 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
-def get_gpt_response(user_message):
+def get_gpt_response(thread_id):
     """
     Sends user_message to GPT and returns the response.
     """
     try:
-        response = client.chat.completions.create(
-            model="gpt-4o",  # or "gpt-4", etc.
-            messages=[
-                {"role": "system", "content": "You are a helpful WhatsApp chatbot."},
-                {"role": "user", "content": user_message},
-            ],
+        run = client.beta.threads.runs.create_and_poll(
+            thread_id=thread_id,
+            assistant_id='asst_bUcnaEiCLHPcFv1TDr4GfzVu'
         )
-        answer = response.choices[0].message.content
-        return answer.strip()
+        if run.status == 'completed':
+                messages = client.beta.threads.messages.list(thread_id=thread_id)
+
+                # Cautiously check if messages.data is not empty
+                if messages.data:
+                    # Adjust indexing if needed based on actual response structure
+                    assistant_response = messages.data[0].content[0].text.value
+                    return assistant_response
+                    # Send the response back on WhatsApp
+                else:
+                     return "No message Data Found"
+                
+        else:
+             return "run not completed"
+        # response = client.chat.completions.create(
+        #     model="gpt-4o",  # or "gpt-4", etc.
+        #     messages=[
+        #         {"role": "system", "content": "You are a helpful WhatsApp chatbot."},
+        #         {"role": "user", "content": user_message},
+        #     ],
+        # )
+        # answer = response.choices[0].message.content
+        # return answer.strip()
     except Exception as e:
         print(f"client API error: {str(e)}")
         return "Sorry, I couldn't process that at the moment."

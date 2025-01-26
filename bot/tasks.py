@@ -65,29 +65,22 @@ def process_incoming_message(sender_phone, thread_id):
 
     # Attempt to create and poll a run on the given thread
     try:
-        logger.info("[process_incoming_message] Creating and polling run from OpenAI...")
         run = client.beta.threads.runs.create_and_poll(
             thread_id=thread_id,
             assistant_id='asst_bUcnaEiCLHPcFv1TDr4GfzVu'
         )
-        logger.info(f"[process_incoming_message] run object = {run}")
-        logger.info(f"[process_incoming_message] run status = {run.status}")
     except Exception as e:
-        logger.info("[process_incoming_message] ERROR creating/polling run")
         logger.info(e)
         return  # or re-raise, depending on your error handling
 
     if run.status == 'completed':
         try:
-            logger.info("[process_incoming_message] run is completed, fetching messages...")
             messages = client.beta.threads.messages.list(thread_id=thread_id)
-            logger.info(f"[process_incoming_message] messages object = {messages}")
 
             # Cautiously check if messages.data is not empty
             if messages.data:
                 # Adjust indexing if needed based on actual response structure
                 assistant_response = messages.data[0].content[0].text.value
-                logger.info(f"[process_incoming_message] assistant_response = {assistant_response}")
 
                 # Send the response back on WhatsApp
                 send_whatsapp_message(sender_phone, assistant_response)
