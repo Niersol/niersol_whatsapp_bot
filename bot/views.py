@@ -114,7 +114,7 @@ def whatsapp_webhook(request):
 
                             # print("Scheduling process_incoming_message via Celery...")
                             response = get_gpt_response(thread_id)
-                            send_whatsapp_message(response)
+                            send_whatsapp_message(sender_phone,response)
                             # print("Celery task scheduled successfully.")
                                 # except Exception as e:
                                 #     print(f"ERROR scheduling Celery task: {e}")
