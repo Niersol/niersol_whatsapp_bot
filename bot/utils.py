@@ -13,7 +13,7 @@ def get_gpt_response(thread_id):
     try:
         run = client.beta.threads.runs.create_and_poll(
             thread_id=thread_id,
-            assistant_id='asst_bUcnaEiCLHPcFv1TDr4GfzVu'
+            assistant_id='asst_Uw3un2NZHQm0McEVdTJgN6sw'
         )
         if run.status == 'completed':
                 messages = client.beta.threads.messages.list(thread_id=thread_id)
