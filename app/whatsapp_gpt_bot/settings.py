@@ -129,8 +129,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "<your-api-key-here>")
 WHATSAPP_TOKEN = os.getenv("WHATSAPP_TOKEN", "<your-api-key-here>")
 
-CELERY_BROKER_URL = 'redis://:45645688mm@204.48.23.219:6379/0'  # or 'amqp://guest:guest@localhost//'
-CELERY_RESULT_BACKEND = 'redis://:45645688mm@204.48.23.219:6379/0'
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://redis:6379/1')
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://redis:6379/1')
 
 # Timezone (optional)
 CELERY_TIMEZONE = 'UTC'

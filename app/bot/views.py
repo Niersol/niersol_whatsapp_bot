@@ -75,7 +75,6 @@ def whatsapp_webhook(request):
                             )
                             print(f"Conversation: {conversation}, created={created}")
 
-                            # If new conversation, create a new thread
                             if created:
                                 try:
                                     print("Creating a new thread via OpenAI client...")
@@ -86,52 +85,21 @@ def whatsapp_webhook(request):
                                 except Exception as e:
                                     print(f"ERROR creating thread: {e}")
                                     traceback.print_exc()
-                                    # Decide how you want to handle a failed thread creation
                                     continue
                             else:
-                                # If conversation already existed, fetch the thread_id
                                 thread_id = conversation.thread_id
                                 print(f"Existing conversation with thread_id: {thread_id}")
 
-                            # Make sure we have the thread_id for the next logic
                             thread_id = conversation.thread_id
 
-                            # Check if conversation is active
-                            # if not conversation.is_active:
-                            #     print("Conversation is not active. Activating and queuing Celery task.")
-                            #     conversation.is_active = True
-                            #     conversation.save()
-
-                                # IMPORTANT: Call the Celery task asynchronously
-                                # If your task's signature is process_incoming_message(sender_phone, thread_id),
-                                # do this:
-                                # try:
                             client.beta.threads.messages.create(
                                 thread_id=thread_id,
                                 role="user",
                                 content=user_text
                             )
 
-                            # print("Scheduling process_incoming_message via Celery...")
                             response = get_gpt_response(thread_id)
                             send_whatsapp_message(sender_phone,response)
-                            # print("Celery task scheduled successfully.")
-                                # except Exception as e:
-                                #     print(f"ERROR scheduling Celery task: {e}")
-                                #     traceback.print_exc()
-                            # else:
-                            #     print("Conversation is active, skipping new task. Sending thread message instead.")
-                            #     # If you want to store user messages in the existing thread
-                            #     try:
-                            #         client.beta.threads.messages.create(
-                            #             thread_id=thread_id,
-                            #             role="user",
-                            #             content=user_text
-                            #         )
-                            #         print("Appended user message to existing thread.")
-                            #     except Exception as e:
-                            #         print(f"ERROR adding message to thread: {e}")
-                            #         traceback.print_exc()
 
             return HttpResponse("Event received", status=200)
 

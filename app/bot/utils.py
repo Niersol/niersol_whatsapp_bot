@@ -3,7 +3,7 @@ from django.conf import settings
 import time
 import requests
 from .models import Conversation
-
+import json
 from openai import OpenAI 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 def get_gpt_response(thread_id):
@@ -65,3 +65,22 @@ def send_whatsapp_message(to_number, message_text):
     response = requests.post(url, headers=headers, json=data)
     response.raise_for_status()
     return response.json()
+
+def mark_message_as_seen(message_id):
+    """
+    Marks the incoming WhatsApp message as read.
+    """
+    url = f"{WHATSAPP_CLOUD_API_BASE}/{PHONE_NUMBER_ID}/messages"
+    headers = {
+        "Authorization": f"Bearer {WHATSAPP_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "messaging_product": "whatsapp",
+        "status": "read",
+        "message_id": message_id
+    }
+
+    response = requests.post(url, headers=headers, data=json.dumps(payload))
+    print(f"Mark as read response code: {response.status_code}")
+    print(f"Mark as read response body: {response.text}")

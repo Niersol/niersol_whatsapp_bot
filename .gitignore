@@ -1,2 +1,6 @@
 db.sqlite3
 *.pyc
+.env.prod
+.env.dev
+.env.prod.proxy-companion
+venv
