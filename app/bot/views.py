@@ -6,9 +6,9 @@ from django.shortcuts import render
 from django.conf import settings
 from asgiref.sync import sync_to_async
 
-from .utils import get_gpt_response, send_whatsapp_message
+from .utils import get_gpt_response, send_whatsapp_message,mark_message_as_seen
 from .models import Conversation
-from .tasks import process_incoming_message
+from .tasks import send_message_whatsapp
 from openai import OpenAI
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
@@ -65,6 +65,7 @@ def whatsapp_webhook(request):
                         print("Processing message:", msg)
 
                         sender_phone = msg.get("from")
+                        id = msg.get('id')
                         user_text = msg.get("text", {}).get("body", "")
                         print(f"sender_phone: {sender_phone}, user_text: {user_text}")
 
@@ -91,15 +92,20 @@ def whatsapp_webhook(request):
                                 print(f"Existing conversation with thread_id: {thread_id}")
 
                             thread_id = conversation.thread_id
-
-                            client.beta.threads.messages.create(
-                                thread_id=thread_id,
-                                role="user",
-                                content=user_text
-                            )
-
-                            response = get_gpt_response(thread_id)
-                            send_whatsapp_message(sender_phone,response)
+                            try:
+                                mark_message_as_seen(id)
+                            except:
+                                pass
+                            if conversation.is_active:
+                                client.beta.threads.messages.create(
+                                    thread_id=thread_id,
+                                    role="user",
+                                    content=user_text
+                                )
+                            else:
+                                conversation.is_active = True
+                                conversation.save()
+                                send_message_whatsapp.delay(sender_phone,thread_id)
 
             return HttpResponse("Event received", status=200)
 
