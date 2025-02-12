@@ -6,6 +6,7 @@ This is a Django-based application that allows users to create and manage multip
 
 - Create and manage multiple assistants for WhatsApp Business accounts.
 - Simple configuration by adding phone number IDs and assistant IDs for each assistant.
+- Capable of answering voice messages and processing images sent by users.
 - Scalable deployment using Docker and Docker Compose.
 
 ## Prerequisites
@@ -34,7 +35,7 @@ The application requires environment variables for configuration. Ensure you hav
 
 ## Configuration
 
-To set up an assistant, provide the following details in admin:
+To set up an assistant, provide the following details:
 
 - **Phone Number ID**: The ID of the WhatsApp Business phone number.
 - **Assistant ID**: The unique identifier for the assistant.
@@ -47,6 +48,7 @@ Once the application is running, you can:
 
 - Add phone number IDs and assistant IDs for each assistant.
 - Manage multiple assistants for different business phone numbers.
+- Enable assistants to respond to voice messages and images.
 
 ## Deployment
 
@@ -54,4 +56,4 @@ This application is designed for production deployment using Docker. Ensure Dock
 
 ## License
 
-This project is licensed under the MIT License.
+This project is under a strict proprietary license. No part of this repository, including code, documentation, or associated files, may be copied, distributed, or used without explicit permission from the repository owner. All rights reserved.
